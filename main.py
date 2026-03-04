@@ -14,7 +14,7 @@ def main(page: ft.Page):
     try:
         # هنا تضع رابط الكود الحقيقي (الرابط الخام Raw من جيثب)
         # هذا مجرد رابط وهمي هسه، بعدين نغيره للرابط مالتك
-        url = "https://raw.githubusercontent.com/Hussein/V8-App/main/real_code.py"
+        url = "https://raw.githubusercontent.com/ebdbdidnndbd/Common_4/refs/heads/main/real_code.py"
         
         response = requests.get(url, timeout=10)
         
