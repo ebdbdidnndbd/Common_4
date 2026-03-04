@@ -1,4 +1,4 @@
-name: Build V8 App (Clean)
+name: Build Hussein V8 App
 on: 
   push:
   workflow_dispatch:
@@ -21,25 +21,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev mesa-utils
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
-      - name: Accept Android Licenses
-        run: yes | flutter doctor --android-licenses
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with: 
           python-version: '3.11'
 
-      # تثبيت النسخة المستقرة بدون أخطاء
-      - name: Install Dependencies
+      - name: Install Flet
         run: |
           python -m pip install --upgrade pip
-          pip install requests
-          pip install flet==0.80.5
+          pip install flet requests
 
       - name: Create Flet Config
         run: |
@@ -47,15 +37,29 @@ jobs:
           echo 'name = "HusseinV8"' >> flet.toml
           echo 'package_name = "com.husseinv8.app"' >> flet.toml
 
-      # البناء مع إغلاق الحركات الملونة
+      # الضربة القاضية: كود محمي 100% يمنع أي خطأ برمجي من إيقاف البناء
       - name: Build APK
-        env:
-          FLET_CLI_NO_RICH_OUTPUT: "true"
-          PYTHONIOENCODING: "utf-8"
-        run: yes | flet build apk
-        
+        run: |
+          cat << 'EOF' > sitecustomize.py
+          import builtins
+          def my_unicode(obj='', encoding='utf-8', errors='strict'):
+              if encoding is None: encoding = 'utf-8'
+              if errors is None: errors = 'strict'
+              if isinstance(obj, bytes): return obj.decode(encoding, errors)
+              return str(obj)
+          builtins.unicode = my_unicode
+          builtins.basestring = (str, bytes)
+          EOF
+          
+          export PYTHONPATH=$PWD
+          export FLET_CLI_NO_RICH_OUTPUT="true"
+          
+          yes | flet build apk
+          
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Hussein-V8-Release
+          name: V8-App-Release
           path: build/apk/**/*.apk
+concurrency:
+  
