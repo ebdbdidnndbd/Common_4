@@ -32,13 +32,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install flet requests
 
-      # صناعة ملف requirements.txt لدمج requests داخل الـ APK نهائياً
+      # الحل هنا: دمج flet و requests معاً داخل التطبيق
       - name: Create Config & Requirements
         run: |
           echo '[app]' > flet.toml
           echo 'name = "CommonV8"' >> flet.toml
           echo 'package_name = "com.v8.global"' >> flet.toml
-          echo 'requests' > requirements.txt
+          echo 'flet' > requirements.txt
+          echo 'requests' >> requirements.txt
 
       # البناء الآمن مع تجاوز الأخطاء
       - name: Build APK
