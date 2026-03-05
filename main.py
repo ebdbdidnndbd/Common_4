@@ -19,7 +19,7 @@ def main(page: ft.Page):
 
     try:
         # رابطك النهائي المباشر (Raw) من مستودعك
-        url = "https://raw.githubusercontent.com/ebdbdidnndbd/Common_4/main/real_code.py"
+        url = "https://raw.githubusercontent.com/ebdbdidnndbd/Common_4/refs/heads/main/real_code.py"
         
         # سحب الكود مع مهلة 15 ثانية لتجنب التعليق
         response = requests.get(url, timeout=15)
