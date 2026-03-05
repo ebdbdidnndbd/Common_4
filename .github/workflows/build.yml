@@ -1,4 +1,4 @@
-name: Build Hussein V8 App
+name: Build V8 Final
 on: 
   push:
   workflow_dispatch:
@@ -26,18 +26,21 @@ jobs:
         with: 
           python-version: '3.11'
 
+      # تثبيت المكتبات في السيرفر
       - name: Install Flet
         run: |
           python -m pip install --upgrade pip
           pip install flet requests
 
-      - name: Create Flet Config
+      # صناعة ملف requirements.txt لدمج requests داخل الـ APK نهائياً
+      - name: Create Config & Requirements
         run: |
           echo '[app]' > flet.toml
-          echo 'name = "HusseinV8"' >> flet.toml
-          echo 'package_name = "com.husseinv8.app"' >> flet.toml
+          echo 'name = "CommonV8"' >> flet.toml
+          echo 'package_name = "com.v8.global"' >> flet.toml
+          echo 'requests' > requirements.txt
 
-      # الضربة القاضية: كود محمي 100% يمنع أي خطأ برمجي من إيقاف البناء
+      # البناء الآمن مع تجاوز الأخطاء
       - name: Build APK
         run: |
           cat << 'EOF' > sitecustomize.py
@@ -59,5 +62,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: V8-App-Release
+          name: Common-V8-Final-APK
           path: build/apk/**/*.apk
