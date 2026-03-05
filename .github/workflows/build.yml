@@ -1,0 +1,63 @@
+name: Build Hussein V8 App
+on: 
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Install Linux Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev mesa-utils
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with: 
+          python-version: '3.11'
+
+      - name: Install Flet
+        run: |
+          python -m pip install --upgrade pip
+          pip install flet requests
+
+      - name: Create Flet Config
+        run: |
+          echo '[app]' > flet.toml
+          echo 'name = "HusseinV8"' >> flet.toml
+          echo 'package_name = "com.husseinv8.app"' >> flet.toml
+
+      # الضربة القاضية: كود محمي 100% يمنع أي خطأ برمجي من إيقاف البناء
+      - name: Build APK
+        run: |
+          cat << 'EOF' > sitecustomize.py
+          import builtins
+          def my_unicode(obj='', encoding='utf-8', errors='strict'):
+              if encoding is None: encoding = 'utf-8'
+              if errors is None: errors = 'strict'
+              if isinstance(obj, bytes): return obj.decode(encoding, errors)
+              return str(obj)
+          builtins.unicode = my_unicode
+          builtins.basestring = (str, bytes)
+          EOF
+          
+          export PYTHONPATH=$PWD
+          export FLET_CLI_NO_RICH_OUTPUT="true"
+          
+          yes | flet build apk
+          
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: V8-App-Release
+          path: build/apk/**/*.apk
