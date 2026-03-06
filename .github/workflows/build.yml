@@ -26,20 +26,19 @@ jobs:
         with: 
           python-version: '3.11'
 
-      # تثبيت Flet فقط بدون أي تعقيدات
       - name: Install Flet
         run: |
           python -m pip install --upgrade pip
-          pip install flet
+          pip install flet requests
 
-      # تم حذف requirements.txt نهائياً لتجنب الشاشة السوداء
-      - name: Create Flet Config
+      # التصحيح الأهم: وضع requests فقط وعدم وضع flet أبداً
+      - name: Create Config & Requirements
         run: |
           echo '[app]' > flet.toml
           echo 'name = "CommonV8"' >> flet.toml
           echo 'package_name = "com.v8.global"' >> flet.toml
+          echo 'requests' > requirements.txt
 
-      # البناء الآمن
       - name: Build APK
         run: |
           cat << 'EOF' > sitecustomize.py
