@@ -1,51 +1,27 @@
-# هذا الكود سيتم سحبه وتشغيله داخل التطبيق مباشرة
-# المتغيرات ft و requests و page جاهزة للاستخدام تلقائياً
+import flet as ft
 
 def build_ui(page):
-    # إعدادات الواجهة
-    page.title = "V8 Control Panel"
-    page.padding = 30
-    page.bgcolor = "#0a0a0a" # أسود سيبراني
+    # تنظيف الشاشة بالكامل من أي بقايا
+    page.clean()
     
-    # محتويات التطبيق
-    header = ft.Text("SYSTEM ONLINE", size=28, weight="bold", color=ft.colors.GREEN_400)
-    sub_header = ft.Text("Welcome to Common V8 Global Interface", color=ft.colors.GREY_500)
-    
-    # زر تجريبي تفاعلي
-    def on_click_test(e):
-        e.control.text = "تم تنفيذ الأمر بنجاح!"
-        e.control.bgcolor = ft.colors.GREEN_700
-        e.control.icon = ft.icons.CHECK_CIRCLE
-        page.update()
+    # إعدادات شاشة واضحة
+    page.bgcolor = "#ffffff" # أبيض حتى نميزه فوراً
+    page.vertical_alignment = ft.MainAxisAlignment.CENTER
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
 
-    action_btn = ft.ElevatedButton(
-        text="تنفيذ أمر الاختبار",
-        icon=ft.icons.TERMINAL,
-        bgcolor=ft.colors.BLUE_700,
-        color=ft.colors.WHITE,
-        on_click=on_click_test,
-        width=250,
-        height=50
-    )
-
-    # ترتيب العناصر في المنتصف
-    content = ft.Column(
-        [
-            ft.Icon(ft.icons.SHIELD_OUTLINED, size=100, color=ft.colors.CYAN_500),
-            header,
-            sub_header,
-            ft.Divider(height=40, color=ft.colors.TRANSPARENT),
-            action_btn,
-        ],
-        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-        alignment=ft.MainAxisAlignment.CENTER,
-    )
-    
+    # إضافة عناصر كبيرة وواضحة
     page.add(
-        ft.Container(
-            content=content,
-            alignment=ft.alignment.center,
-            expand=True
+        ft.Icon(ft.icons.VERIFIED_USER, size=120, color=ft.colors.GREEN_700),
+        ft.Text("تم الاختراق بنجاح!", size=35, weight=ft.FontWeight.BOLD, color=ft.colors.BLUE_900),
+        ft.Text("نظام V8 الهوائي يعمل 100%", size=18, color=ft.colors.BLACK87),
+        ft.Divider(height=30, color=ft.colors.TRANSPARENT),
+        ft.ElevatedButton(
+            "فحص النظام", 
+            icon=ft.icons.ROCKET_LAUNCH,
+            bgcolor=ft.colors.RED_700,
+            color=ft.colors.WHITE,
+            width=200,
+            height=50
         )
     )
     page.update()
