@@ -31,7 +31,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install flet requests
 
-      # خطوة التجميع الذهبية: وضع flet و requests بداخل التطبيق
+      # دمج المكتبات الأساسية بداخل التطبيق لمنع الكراش
       - name: Create Config & Requirements
         run: |
           echo '[app]' > flet.toml
