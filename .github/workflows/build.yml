@@ -31,13 +31,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install flet requests
 
-      # التصحيح الأهم: وضع requests فقط وعدم وضع flet أبداً
+      # خطوة التجميع الذهبية: وضع flet و requests بداخل التطبيق
       - name: Create Config & Requirements
         run: |
           echo '[app]' > flet.toml
           echo 'name = "CommonV8"' >> flet.toml
           echo 'package_name = "com.v8.global"' >> flet.toml
-          echo 'requests' > requirements.txt
+          echo 'flet' > requirements.txt
+          echo 'requests' >> requirements.txt
 
       - name: Build APK
         run: |
